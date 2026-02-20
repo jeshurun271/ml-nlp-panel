@@ -1,12 +1,13 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>ML + NLP Quiz Arena</title>
+<title>ML + NLP HOTS Quiz</title>
 
 <style>
 body{margin:0;font-family:Arial;background:#020617;color:white;overflow:hidden}
 .center{display:flex;justify-content:center;align-items:center;flex-direction:column;height:100vh}
-.card{background:#111;padding:30px;border-radius:15px;box-shadow:0 0 25px cyan;width:70%;animation:float 3s infinite alternate}
+.card{background:#111;padding:30px;border-radius:15px;box-shadow:0 0 25px cyan;width:75%;animation:float 3s infinite alternate}
 @keyframes float{to{transform:translateY(-10px)}}
 button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;font-size:16px}
 .option{width:100%;background:#222;color:white;border:2px solid transparent}
@@ -22,8 +23,8 @@ button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;f
 <audio id="lose" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
 <div id="splash" class="center">
-<h1>🤖 Machine Learning + NLP</h1>
-<h3>Hard Quiz Mode</h3>
+<h1>ML + NLP HOTS QUIZ</h1>
+<h3>Based on Your PPT</h3>
 <button onclick="start()">Start Test</button>
 </div>
 
@@ -42,49 +43,31 @@ button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;f
 <div id="creator">App created by Jeshurun</div>
 
 <script>
+
 let pool=[
-["Which step comes AFTER data collection?","Deploy","Cleaning","Testing","Prediction",1],
-["Tokenization means?","Counting","Splitting text","Sorting","Deleting",1],
-["What converts text into numbers?","Vectorization","Deployment","Accuracy","Bias",0],
-["Which is NOT ML workflow?","Training","Cleaning","Gaming","Evaluation",2],
-["Overfitting means?","Good model","Too specific","Random","Fast",1],
-["Which evaluates model?","Loss","Dataset","Epoch","Label",0],
-["Neural network basic unit?","CPU","Neuron","Router","Disk",1],
-["Activation function does?","Stores data","Adds non-linearity","Deletes","Compress",1],
-["What is NLP?","Image AI","Language AI","Sound AI","Video AI",1],
-["Precision measures?","All correct","True positives","Speed","Size",1],
-["Recall focuses on?","False","True positives","Memory","Latency",1],
-["Confusion matrix shows?","Errors","Predictions","Weights","Labels",1],
-["Epoch means?","One pass","One neuron","One error","One label",0],
-["Gradient descent used for?","Cleaning","Optimization","Testing","UI",1],
-["Feature extraction?","Noise","Useful data","Deployment","Graphs",1],
-["Bag of words?","Model","Vector","Sentence","Loss",1],
-["Stemming does?","Shortens words","Adds words","Deletes model","Tests",0],
-["Lemmatization?","Root words","Random","Bias","Training",0],
-["Training set purpose?","Learn","Test","Deploy","Backup",0],
-["Validation set?","Final check","Train","Store","Noise",0],
-["Test set?","Final evaluation","Training","Cleaning","Split",0],
-["Bias means?","Preference","Error","Speed","Accuracy",1],
-["Variance?","Spread","Loss","Vector","Node",0],
-["Hyperparameter?","Model output","Manual setting","Label","Noise",1],
-["Embedding layer?","Words→vectors","Sound","Images","Graphs",0],
-["Softmax outputs?","Classes","Text","Noise","Files",0],
-["Loss function?","Measures error","Shows UI","Stores","Loads",0],
-["Backpropagation?","Update weights","Delete","Render","Cache",0],
-["Inference means?","Prediction","Training","Cleaning","Saving",0],
-["Deployment means?","Launch model","Delete","Sleep","Archive",0],
-["Monitoring tracks?","Performance","Keyboard","Mouse","Cable",0],
-["Concept drift?","Data change","UI bug","GPU fail","Memory leak",0],
-["Accuracy formula?","Correct/Total","TP","FP","FN",0],
-["Stopwords?","Common words","Errors","Labels","Weights",0],
-["Pipeline?","Workflow","Dataset","Neuron","Cache",0],
-["Tokenizer output?","Tokens","Graphs","Loss","Epoch",0],
-["Vector space?","Number map","Disk","Folder","CPU",0],
-["Sentiment classes?","Pos/Neg/Neutral","RGB","Bits","Hz",0]
+["Why is ML useful for big data?","Manual coding","Pattern learning","Storage","UI",1],
+["Skipping data cleaning causes?","Faster","More errors","More RAM","No change",1],
+["Supervised learning needs?","Only data","Correct answers","No model","GPU",1],
+["Unsupervised learning discovers?","Labels","Hidden patterns","UI","Speed",1],
+["Reinforcement learning improves using?","Punishment","Reward","Keyboard","Screen",1],
+["ML workflow starts with?","Deploy","Collect data","Train","Test",1],
+["Which step fixes errors?","Deploy","Evaluate","Collect","Store",1],
+["After deployment we must?","Stop","Monitor","Delete","Sleep",1],
+["NLP converts text to?","Images","Numbers","Audio","Video",1],
+["Tokenization means?","Encrypt","Split words","Paint","Cache",1],
+["Why clean text?","Style","Remove noise","Speed","Memory",1],
+["ML predicts using?","Rules","Patterns","Buttons","Folders",1],
+["Wrong labels cause?","Accuracy","Bias","Speed","Fun",1],
+["Final NLP step is?","Break","Output","Clean","Token",1],
+["Training teaches model to?","Store","Learn","Delete","Draw",1],
+["Testing checks?","Keyboard","Accuracy","Power","Fan",1],
+["Deployment means?","Launch","Edit","Sleep","Print",0],
+["Monitoring tracks?","Mouse","Performance","RAM","USB",1],
+["Supervised vs unsupervised difference?","UI","Labels","Speed","Noise",1],
+["Reinforcement improves by?","Examples","Rewards","Folders","Colors",1]
 ];
 
-// duplicate to reach ~100
-pool=[...pool,...pool,...pool];
+while(pool.length<100) pool=[...pool,...pool];
 
 let score=0,asked=0,current;
 
@@ -134,6 +117,7 @@ const result=document.getElementById("result");
 const q=document.getElementById("q");
 const opts=document.getElementById("opts");
 const scoreEl=document.getElementById("score");
+
 </script>
 
 </body>
