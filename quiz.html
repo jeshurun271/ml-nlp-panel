@@ -1,137 +1,140 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>ML + NLP Quiz Arena</title>
+<title>ML Quiz – Created by Jeshurun</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(-45deg,#020617,#0f172a,#020617,#0f172a);
-background-size:400% 400%;
-animation:bgmove 12s infinite;
+background:radial-gradient(circle,#020024,#090979,#000);
 color:white;
-text-align:center;
 overflow:hidden;
 }
 
-@keyframes bgmove{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
-}
+h1{text-align:center;}
 
 .card{
-background:#1e293b;
-padding:25px;
-border-radius:20px;
-max-width:800px;
-margin:40px auto;
-box-shadow:0 0 25px #000;
-animation:float 4s infinite ease-in-out;
+max-width:700px;
+margin:60px auto;
+background:#111;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 30px cyan;
+animation:float 3s infinite alternate;
 }
 
 @keyframes float{
-50%{transform:translateY(-6px)}
+from{transform:translateY(0)}
+to{transform:translateY(-15px)}
 }
 
-.option{
-display:block;
-margin:12px;
-padding:12px;
-border-radius:10px;
-background:#334155;
-cursor:pointer;
-transition:.3s;
-}
-
-.option:hover{background:#38bdf8;transform:scale(1.05)}
-
-.footer{
-position:absolute;
-bottom:8px;
+button{
 width:100%;
-opacity:.6;
-font-size:14px;
+margin-top:10px;
+padding:12px;
+background:#0ff;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
 }
 
-.full{position:absolute;right:10px;top:10px}
+button:hover{background:#0cc}
 
+#creator{
+position:fixed;
+bottom:10px;
+right:10px;
+opacity:.7;
+}
+
+.bubble{
+position:absolute;
+width:20px;
+height:20px;
+background:cyan;
+border-radius:50%;
+animation:bubble 10s infinite linear;
+opacity:.4;
+}
+
+@keyframes bubble{
+from{bottom:-20px;}
+to{bottom:110%;}
+}
 </style>
 </head>
 
 <body>
 
-<button class="full" onclick="document.documentElement.requestFullscreen()">Fullscreen</button>
-
-<h1>ML + NLP Quiz Arena</h1>
+<h1>🤖 Machine Learning Quiz</h1>
 
 <div class="card">
-
 <h2 id="q"></h2>
-
 <div id="opts"></div>
-
-<p>Score: <span id="score">0</span>/20</p>
-
 </div>
 
-<div class="footer">✨ Quiz created by Jeshurun</div>
+<div id="creator">App created by Jeshurun</div>
 
 <script>
-
-let questions=[
-{q:"What is Machine Learning?",o:["Teaching computers to learn","Watching movies","Typing code","Playing games"],a:0},
-{q:"ML is part of?",o:["AI","Biology","Math","History"],a:0},
-{q:"What does NLP stand for?",o:["Natural Language Processing","New Learning Program","Neural Logic Path","None"],a:0},
-{q:"Supervised learning uses?",o:["Only data","Data with answers","No data","Games"],a:1},
-{q:"Unsupervised learning gives?",o:["Correct answers","No data","Only data","Rewards"],a:2},
-{q:"Reinforcement learning uses?",o:["Rewards","Books","Teachers","Music"],a:0},
-{q:"NLP helps computers?",o:["Run","Sleep","Understand language","Draw"],a:2},
-];
-
-// duplicate to simulate big pool
-while(questions.length<100){
-questions.push(...JSON.parse(JSON.stringify(questions)));
+for(let i=0;i<40;i++){
+let b=document.createElement("div");
+b.className="bubble";
+b.style.left=Math.random()*100+"%";
+b.style.animationDuration=5+Math.random()*10+"s";
+document.body.appendChild(b);
 }
 
-questions=questions.slice(0,100);
+const pool=[
+["What is ML?","Teaching computers","Cooking","Drawing","Sleeping",0],
+["NLP means?","Robot talk","Language processing","Gaming","Music",1],
+["Data used to train?","Pizza","Numbers","Dataset","Shoes",2],
+["AI brain?","CPU","Neural Network","RAM","Fan",1],
+["Positive sentiment?","I love it","I hate it","Ok","None",0],
+["Negative example?","Great","Bad","Nice","Wow",1],
+["Tokenization means?","Breaking words","Eating","Drawing","Jumping",0],
+["Model learns from?","Experience","Battery","Screen","Mouse",0],
+["Deployment means?","Launch","Delete","Sleep","Ignore",0],
+["Confidence score is?","Accuracy","Guess","Luck","Battery",0]
+];
 
-let pool=[...questions];
+while(pool.length<100) pool.push(...pool);
+
+let used=[];
 let score=0;
 
 function next(){
-
-if(score>=20){
-document.body.innerHTML="<h1>🎉 Finished! Score "+score+"/20</h1><p>App created by Jeshurun</p>";
-return;
+if(used.length==20){
+alert("Quiz finished!");
+location.reload();
 }
 
-let i=Math.floor(Math.random()*pool.length);
-current=pool.splice(i,1)[0];
+let i;
+do{i=Math.floor(Math.random()*pool.length);}while(used.includes(i));
+used.push(i);
 
-document.getElementById("q").innerText=current.q;
+let q=pool[i];
+document.getElementById("q").innerText=q[0];
 
 let html="";
-current.o.forEach((x,j)=>{
-html+=`<div class='option' onclick='check(${j})'>${x}</div>`;
-});
-
+for(let j=1;j<=4;j++){
+html+=`<button onclick="pick(${j-1},${q[5]})">${q[j]}</button>`;
+}
 document.getElementById("opts").innerHTML=html;
 }
 
-function check(i){
-
-if(i===current.a){
+function pick(a,b){
+if(a!=b){
+alert("Wrong! Question removed.");
+}else{
 score++;
-document.getElementById("score").innerText=score;
 }
-
 next();
 }
 
 next();
-
 </script>
 
 </body>
