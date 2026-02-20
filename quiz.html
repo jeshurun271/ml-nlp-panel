@@ -1,31 +1,79 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>ML + NLP HOTS Quiz</title>
+<meta charset="utf-8">
+<title>ML + NLP Quiz</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#020617;color:white;overflow:hidden}
-.center{display:flex;justify-content:center;align-items:center;flex-direction:column;height:100vh}
-.card{background:#111;padding:30px;border-radius:15px;box-shadow:0 0 25px cyan;width:75%;animation:float 3s infinite alternate}
-@keyframes float{to{transform:translateY(-10px)}}
-button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;font-size:16px}
-.option{width:100%;background:#222;color:white;border:2px solid transparent}
+html,body{
+margin:0;
+overflow:hidden;
+background:black;
+font-family:Arial;
+color:white;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.center{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+height:100vh;
+text-align:center;
+}
+
+.card{
+background:#111;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 30px cyan;
+width:75%;
+max-width:800px;
+}
+
+button{
+padding:12px 20px;
+border-radius:10px;
+border:none;
+margin:10px;
+background:cyan;
+font-size:16px;
+cursor:pointer;
+}
+
+.option{
+width:100%;
+background:#222;
+color:white;
+border:2px solid transparent;
+}
+
 .correct{border-color:lime}
 .wrong{border-color:red}
-#creator{position:fixed;bottom:10px;right:10px;opacity:.6}
+
+#creator{
+position:fixed;
+bottom:10px;
+right:10px;
+opacity:.6;
+}
 </style>
 </head>
 
 <body>
 
-<audio id="win" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-<audio id="lose" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+<canvas id="fluid"></canvas>
 
 <div id="splash" class="center">
 <h1>ML + NLP HOTS QUIZ</h1>
-<h3>Based on Your PPT</h3>
-<button onclick="start()">Start Test</button>
+<button onclick="start()">Start Quiz</button>
 </div>
 
 <div id="quiz" class="center" style="display:none">
@@ -43,28 +91,88 @@ button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;f
 <div id="creator">App created by Jeshurun</div>
 
 <script>
+// ================== SOUND (OFFLINE) ==================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+function playCorrect(){
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.connect(g); g.connect(audioCtx.destination);
+o.frequency.value=800;
+g.gain.value=0.2;
+o.start();
+o.stop(audioCtx.currentTime+0.2);
+}
+
+function playWrong(){
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.connect(g); g.connect(audioCtx.destination);
+o.frequency.value=200;
+g.gain.value=0.2;
+o.start();
+o.stop(audioCtx.currentTime+0.3);
+}
+
+// ================== FLUID ==================
+const canvas=document.getElementById("fluid");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+}
+onresize=resize;
+resize();
+
+let px=0,py=0,mx=0,my=0;
+
+addEventListener("mousemove",e=>{
+mx=e.clientX; my=e.clientY;
+});
+addEventListener("touchmove",e=>{
+mx=e.touches[0].clientX;
+my=e.touches[0].clientY;
+});
+
+function fluid(){
+ctx.fillStyle="rgba(0,0,0,.2)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+let dx=mx-px, dy=my-py;
+let d=Math.sqrt(dx*dx+dy*dy);
+
+if(d>1){
+for(let i=0;i<6;i++){
+let x=px+dx*i/6;
+let y=py+dy*i/6;
+
+ctx.beginPath();
+ctx.arc(x,y,35,0,Math.PI*2);
+ctx.fillStyle=`hsla(${Date.now()/15%360},100%,60%,.6)`;
+ctx.shadowColor="cyan";
+ctx.shadowBlur=50;
+ctx.fill();
+}
+px=mx; py=my;
+}
+
+requestAnimationFrame(fluid);
+}
+fluid();
+
+// ================== QUIZ ==================
 let pool=[
-["Why is ML useful for big data?","Manual coding","Pattern learning","Storage","UI",1],
-["Skipping data cleaning causes?","Faster","More errors","More RAM","No change",1],
-["Supervised learning needs?","Only data","Correct answers","No model","GPU",1],
-["Unsupervised learning discovers?","Labels","Hidden patterns","UI","Speed",1],
-["Reinforcement learning improves using?","Punishment","Reward","Keyboard","Screen",1],
-["ML workflow starts with?","Deploy","Collect data","Train","Test",1],
-["Which step fixes errors?","Deploy","Evaluate","Collect","Store",1],
-["After deployment we must?","Stop","Monitor","Delete","Sleep",1],
-["NLP converts text to?","Images","Numbers","Audio","Video",1],
+["Why is ML useful for large datasets?","Manual rules","Pattern learning","UI","Storage",1],
+["Supervised learning requires?","Rewards","Labels","Speed","GPU",1],
+["Unsupervised learning finds?","Answers","Hidden patterns","UI","Accuracy",1],
+["NLP converts text into?","Images","Numbers","Sound","Video",1],
 ["Tokenization means?","Encrypt","Split words","Paint","Cache",1],
-["Why clean text?","Style","Remove noise","Speed","Memory",1],
-["ML predicts using?","Rules","Patterns","Buttons","Folders",1],
-["Wrong labels cause?","Accuracy","Bias","Speed","Fun",1],
-["Final NLP step is?","Break","Output","Clean","Token",1],
-["Training teaches model to?","Store","Learn","Delete","Draw",1],
-["Testing checks?","Keyboard","Accuracy","Power","Fan",1],
-["Deployment means?","Launch","Edit","Sleep","Print",0],
-["Monitoring tracks?","Mouse","Performance","RAM","USB",1],
-["Supervised vs unsupervised difference?","UI","Labels","Speed","Noise",1],
-["Reinforcement improves by?","Examples","Rewards","Folders","Colors",1]
+["Overfitting means?","Fast model","Too specific","Random","Slow",1],
+["Epoch means?","One pass","One neuron","One error","One label",0],
+["Backpropagation used to?","Update weights","Delete model","Render UI","Cache",0],
+["Deployment means?","Launch model","Edit","Sleep","Print",0],
+["Monitoring tracks?","Mouse","Performance","RAM","USB",1]
 ];
 
 while(pool.length<100) pool=[...pool,...pool];
@@ -74,6 +182,7 @@ let score=0,asked=0,current;
 function start(){
 splash.style.display="none";
 quiz.style.display="flex";
+audioCtx.resume(); // unlock sound
 next();
 }
 
@@ -100,15 +209,15 @@ document.querySelectorAll(".option").forEach(x=>x.disabled=true);
 
 if(a==b){
 btn.classList.add("correct");
-win.play();
+playCorrect();
 score++;
 }else{
 btn.classList.add("wrong");
-lose.play();
+playWrong();
 }
 
 asked++;
-setTimeout(next,800);
+setTimeout(next,900);
 }
 
 const splash=document.getElementById("splash");
@@ -117,141 +226,7 @@ const result=document.getElementById("result");
 const q=document.getElementById("q");
 const opts=document.getElementById("opts");
 const scoreEl=document.getElementById("score");
-
-</script>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Magic Fluid</title>
-
-<style>
-html,body{
-margin:0;
-overflow:hidden;
-background:black;
-}
-canvas{
-width:100vw;
-height:100vh;
-display:block;
-}
-</style>
-</head>
-
-<body>
-
-<canvas id="c"></canvas>
-
-<script>
-const canvas = document.getElementById("c");
-const gl = canvas.getContext("webgl");
-
-function resize(){
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-gl.viewport(0,0,canvas.width,canvas.height);
-}
-onresize=resize;
-resize();
-
-const vs=`
-attribute vec2 p;
-void main(){
-gl_Position=vec4(p,0,1);
-}`;
-
-const fs=`
-precision highp float;
-
-uniform vec2 r;
-uniform float t;
-uniform vec2 m;
-
-float hash(vec2 p){
-return fract(sin(dot(p,vec2(127.1,311.7)))*43758.545);
-}
-
-float noise(vec2 p){
-vec2 i=floor(p);
-vec2 f=fract(p);
-float a=hash(i);
-float b=hash(i+vec2(1,0));
-float c=hash(i+vec2(0,1));
-float d=hash(i+vec2(1,1));
-vec2 u=f*f*(3.-2.*f);
-return mix(a,b,u.x)+(c-a)*u.y*(1.-u.x)+(d-b)*u.x*u.y;
-}
-
-void main(){
-vec2 uv=gl_FragCoord.xy/r;
-uv-=.5;
-uv.x*=r.x/r.y;
-
-float d=length(uv-m*.3);
-float n=noise(uv*5.+t*.2);
-
-float glow=pow(.04/(d+n*.1),2.);
-
-vec3 col=vec3(
-sin(t*.7+uv.x*3.)*.5+.5,
-sin(t*.9+uv.y*4.)*.5+.5,
-sin(t*.6+d*6.)*.5+.5
-);
-
-col*=glow*3.;
-
-gl_FragColor=vec4(col,1);
-}
-`;
-
-function compile(type,src){
-let s=gl.createShader(type);
-gl.shaderSource(s,src);
-gl.compileShader(s);
-return s;
-}
-
-const prog=gl.createProgram();
-gl.attachShader(prog,compile(gl.VERTEX_SHADER,vs));
-gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,fs));
-gl.linkProgram(prog);
-gl.useProgram(prog);
-
-const buf=gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
--1,-1,1,-1,-1,1,
--1,1,1,-1,1,1
-]),gl.STATIC_DRAW);
-
-const loc=gl.getAttribLocation(prog,"p");
-gl.enableVertexAttribArray(loc);
-gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-
-const res=gl.getUniformLocation(prog,"r");
-const time=gl.getUniformLocation(prog,"t");
-const mouse=gl.getUniformLocation(prog,"m");
-
-let mx=0,my=0;
-
-onmousemove=e=>{
-mx=(e.clientX/canvas.width-.5)*2.;
-my=(.5-e.clientY/canvas.height)*2.;
-};
-
-function loop(tt){
-gl.uniform2f(res,canvas.width,canvas.height);
-gl.uniform1f(time,tt*.001);
-gl.uniform2f(mouse,mx,my);
-gl.drawArrays(gl.TRIANGLES,0,6);
-requestAnimationFrame(loop);
-}
-
-loop();
 </script>
 
-</body>
-</html>
 </body>
 </html>
