@@ -1,85 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ML + NLP Quiz</title>
+<title>ML + NLP Quiz Arena</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:radial-gradient(circle,#020024,#090979,#000);
-color:white;
-overflow:hidden;
-}
-
-.center{
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-height:100vh;
-text-align:center;
-}
-
-button{
-padding:15px 40px;
-font-size:18px;
-border:none;
-border-radius:10px;
-background:cyan;
-cursor:pointer;
-margin-top:20px;
-}
-
-.card{
-background:#111;
-padding:30px;
-border-radius:15px;
-box-shadow:0 0 25px cyan;
-max-width:700px;
-animation:float 3s infinite alternate;
-}
-
-@keyframes float{
-from{transform:translateY(0)}
-to{transform:translateY(-15px)}
-}
-
-.option{
-width:100%;
-margin-top:10px;
-padding:12px;
-background:#222;
-border:2px solid transparent;
-color:white;
-border-radius:10px;
-font-size:16px;
-}
-
+body{margin:0;font-family:Arial;background:#020617;color:white;overflow:hidden}
+.center{display:flex;justify-content:center;align-items:center;flex-direction:column;height:100vh}
+.card{background:#111;padding:30px;border-radius:15px;box-shadow:0 0 25px cyan;width:70%;animation:float 3s infinite alternate}
+@keyframes float{to{transform:translateY(-10px)}}
+button{padding:12px;border-radius:10px;border:none;margin:10px;background:cyan;font-size:16px}
+.option{width:100%;background:#222;color:white;border:2px solid transparent}
 .correct{border-color:lime}
 .wrong{border-color:red}
-
-.bubble{
-position:absolute;
-width:15px;
-height:15px;
-background:cyan;
-border-radius:50%;
-opacity:.3;
-animation:bubble 12s infinite linear;
-}
-
-@keyframes bubble{
-from{bottom:-20px;}
-to{bottom:110%;}
-}
-
-#creator{
-position:fixed;
-bottom:10px;
-right:10px;
-opacity:.6;
-}
+#creator{position:fixed;bottom:10px;right:10px;opacity:.6}
 </style>
 </head>
 
@@ -89,9 +22,9 @@ opacity:.6;
 <audio id="lose" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
 <div id="splash" class="center">
-<h1>🤖 ML + NLP Quiz</h1>
-<h3>Learn Machine Learning</h3>
-<button onclick="start()">Start Quiz</button>
+<h1>🤖 Machine Learning + NLP</h1>
+<h3>Hard Quiz Mode</h3>
+<button onclick="start()">Start Test</button>
 </div>
 
 <div id="quiz" class="center" style="display:none">
@@ -109,74 +42,98 @@ opacity:.6;
 <div id="creator">App created by Jeshurun</div>
 
 <script>
-for(let i=0;i<40;i++){
-let b=document.createElement("div");
-b.className="bubble";
-b.style.left=Math.random()*100+"%";
-b.style.animationDuration=5+Math.random()*10+"s";
-document.body.appendChild(b);
-}
-
 let pool=[
-["What is ML?","Teaching computers","Sleeping","Cooking","Drawing",0],
-["NLP means?","Robot","Language processing","Gaming","Music",1],
-["Positive example?","I love this","Bad","Angry","None",0],
-["Negative word?","Great","Nice","Bad","Wow",2],
-["Dataset means?","Shoes","Data collection","Pizza","Laptop",1],
-["AI brain?","Battery","Neural Network","Mouse","Cable",1],
-["Tokenization?","Split words","Jump","Sleep","Paint",0],
-["Model learns from?","Experience","Screen","Keyboard","Fan",0],
-["Deploy means?","Launch","Delete","Sleep","Ignore",0],
-["Confidence score?","Accuracy","Luck","Noise","Battery",0]
+["Which step comes AFTER data collection?","Deploy","Cleaning","Testing","Prediction",1],
+["Tokenization means?","Counting","Splitting text","Sorting","Deleting",1],
+["What converts text into numbers?","Vectorization","Deployment","Accuracy","Bias",0],
+["Which is NOT ML workflow?","Training","Cleaning","Gaming","Evaluation",2],
+["Overfitting means?","Good model","Too specific","Random","Fast",1],
+["Which evaluates model?","Loss","Dataset","Epoch","Label",0],
+["Neural network basic unit?","CPU","Neuron","Router","Disk",1],
+["Activation function does?","Stores data","Adds non-linearity","Deletes","Compress",1],
+["What is NLP?","Image AI","Language AI","Sound AI","Video AI",1],
+["Precision measures?","All correct","True positives","Speed","Size",1],
+["Recall focuses on?","False","True positives","Memory","Latency",1],
+["Confusion matrix shows?","Errors","Predictions","Weights","Labels",1],
+["Epoch means?","One pass","One neuron","One error","One label",0],
+["Gradient descent used for?","Cleaning","Optimization","Testing","UI",1],
+["Feature extraction?","Noise","Useful data","Deployment","Graphs",1],
+["Bag of words?","Model","Vector","Sentence","Loss",1],
+["Stemming does?","Shortens words","Adds words","Deletes model","Tests",0],
+["Lemmatization?","Root words","Random","Bias","Training",0],
+["Training set purpose?","Learn","Test","Deploy","Backup",0],
+["Validation set?","Final check","Train","Store","Noise",0],
+["Test set?","Final evaluation","Training","Cleaning","Split",0],
+["Bias means?","Preference","Error","Speed","Accuracy",1],
+["Variance?","Spread","Loss","Vector","Node",0],
+["Hyperparameter?","Model output","Manual setting","Label","Noise",1],
+["Embedding layer?","Words→vectors","Sound","Images","Graphs",0],
+["Softmax outputs?","Classes","Text","Noise","Files",0],
+["Loss function?","Measures error","Shows UI","Stores","Loads",0],
+["Backpropagation?","Update weights","Delete","Render","Cache",0],
+["Inference means?","Prediction","Training","Cleaning","Saving",0],
+["Deployment means?","Launch model","Delete","Sleep","Archive",0],
+["Monitoring tracks?","Performance","Keyboard","Mouse","Cable",0],
+["Concept drift?","Data change","UI bug","GPU fail","Memory leak",0],
+["Accuracy formula?","Correct/Total","TP","FP","FN",0],
+["Stopwords?","Common words","Errors","Labels","Weights",0],
+["Pipeline?","Workflow","Dataset","Neuron","Cache",0],
+["Tokenizer output?","Tokens","Graphs","Loss","Epoch",0],
+["Vector space?","Number map","Disk","Folder","CPU",0],
+["Sentiment classes?","Pos/Neg/Neutral","RGB","Bits","Hz",0]
 ];
 
-let score=0;
-let asked=0;
-let current;
+// duplicate to reach ~100
+pool=[...pool,...pool,...pool];
+
+let score=0,asked=0,current;
 
 function start(){
-document.getElementById("splash").style.display="none";
-document.getElementById("quiz").style.display="flex";
+splash.style.display="none";
+quiz.style.display="flex";
 next();
 }
 
 function next(){
 if(asked==10){
-document.getElementById("quiz").style.display="none";
-document.getElementById("result").style.display="flex";
-document.getElementById("score").innerText="Final Score: "+score+"/10";
+quiz.style.display="none";
+result.style.display="flex";
+scoreEl.innerText="Final Score: "+score+"/10";
 return;
 }
 
 let i=Math.floor(Math.random()*pool.length);
 current=pool.splice(i,1)[0];
 
-document.getElementById("q").innerText=current[0];
-
-let h="";
-for(let i=1;i<=4;i++){
-h+=`<button class="option" onclick="pick(this,${i-1},${current[5]})">${current[i]}</button>`;
+q.innerText=current[0];
+opts.innerHTML="";
+for(let j=1;j<=4;j++){
+opts.innerHTML+=`<button class="option" onclick="pick(this,${j-1},${current[5]})">${current[j]}</button>`;
 }
-document.getElementById("opts").innerHTML=h;
 }
 
 function pick(btn,a,b){
-let buttons=document.querySelectorAll(".option");
-
-buttons.forEach(x=>x.disabled=true);
+document.querySelectorAll(".option").forEach(x=>x.disabled=true);
 
 if(a==b){
 btn.classList.add("correct");
-document.getElementById("win").play();
+win.play();
 score++;
 }else{
 btn.classList.add("wrong");
-document.getElementById("lose").play();
+lose.play();
 }
 
 asked++;
 setTimeout(next,800);
 }
+
+const splash=document.getElementById("splash");
+const quiz=document.getElementById("quiz");
+const result=document.getElementById("result");
+const q=document.getElementById("q");
+const opts=document.getElementById("opts");
+const scoreEl=document.getElementById("score");
 </script>
 
 </body>
