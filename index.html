@@ -1,1 +1,105 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<title>ML + NLP Learning Panel</title>
+
+<style>
+body {
+margin:0;
+font-family: Arial;
+background:#0f172a;
+color:white;
+}
+
+.container {
+display:grid;
+grid-template-columns: 1fr 1fr;
+grid-template-rows: 1fr 1fr;
+height:100vh;
+gap:10px;
+padding:10px;
+}
+
+.panel {
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+}
+
+textarea {
+width:100%;
+height:120px;
+border-radius:8px;
+padding:10px;
+}
+
+button {
+padding:12px 20px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#38bdf8;
+cursor:pointer;
+}
+
+h3 {
+margin-top:0;
+color:#38bdf8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="panel">
+<h3>ML Pipeline</h3>
+<p id="ml">Data → Training → Model → Prediction</p>
+</div>
+
+<div class="panel">
+<h3>NLP Input</h3>
+<textarea id="text" placeholder="Type a sentence..."></textarea>
+<button onclick="analyze()">Analyze</button>
+</div>
+
+<div class="panel">
+<h3>Explanation</h3>
+<div id="steps">Waiting for input...</div>
+</div>
+
+<div class="panel">
+<h3>Result</h3>
+<div id="result"></div>
+</div>
+
+</div>
+
+<script>
+function analyze() {
+
+document.getElementById("steps").innerHTML =
+"🔄 Tokenizing...<br>🧠 Understanding meaning...<br>📊 Calculating sentiment...";
+
+let text = document.getElementById("text").value.toLowerCase();
+
+if(text.includes("late")) {
+document.getElementById("result").innerHTML =
+"⚠ Delivery: Negative<br>✅ Food: Positive<br><br>Overall Sentiment: Mixed";
+}
+else if(text.includes("good") || text.includes("love")) {
+document.getElementById("result").innerHTML =
+"✅ Overall Sentiment: Positive";
+}
+else {
+document.getElementById("result").innerHTML =
+"🙂 Overall Sentiment: Neutral";
+}
+
+}
+</script>
+
+</body>
+</html>
