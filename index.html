@@ -1,106 +1,164 @@
 
+
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
 <!DOCTYPE html>
-<html>
-<head>
-<title>ML + NLP Learning Panel</title>
-
-<style>
-body {
-margin:0;
-font-family: Arial;
-background:#0f172a;
-color:white;
+font-weight:bold;
 }
 
-.container {
-display:grid;
-grid-template-columns: 1fr 1fr;
-grid-template-rows: 1fr 1fr;
-height:100vh;
-gap:10px;
-padding:10px;
-}
-
-.panel {
-background:#1e293b;
-padding:20px;
-border-radius:12px;
-}
-
-textarea {
-width:100%;
-height:120px;
-border-radius:8px;
-padding:10px;
-}
-
-button {
-padding:12px 20px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#38bdf8;
-cursor:pointer;
-}
-
-h3 {
-margin-top:0;
-color:#38bdf8;
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<button onclick="document.documentElement.requestFullscreen()" style="position:absolute;right:10px;top:10px">Fullscreen</button>
 
-<div class="panel">
-<h3>ML Pipeline</h3>
-<p id="ml">Data → Training → Model → Prediction</p>
-</div>
+<h1>Machine Learning + NLP Tutor</h1>
 
-<div class="panel">
-<h3>NLP Input</h3>
-<textarea id="text" placeholder="Type a sentence..."></textarea>
-<button onclick="analyze()">Analyze</button>
-</div>
+<textarea id="text" placeholder="Type any sentence..."></textarea><br>
+<button onclick="run()">Analyze</button>
 
-<div class="panel">
-<h3>Explanation</h3>
-<div id="steps">Waiting for input...</div>
-</div>
+<div class="bar"><div class="fill" id="conf"></div></div>
 
-<div class="panel">
-<h3>Result</h3>
-<div id="result"></div>
-</div>
-
-</div>
+<div id="log"></div>
 
 <script>
-function analyze() {
 
-document.getElementById("steps").innerHTML =
-"🔄 Tokenizing...<br>🧠 Understanding meaning...<br>📊 Calculating sentiment...";
-
-let text = document.getElementById("text").value.toLowerCase();
-
-if(text.includes("late")) {
-document.getElementById("result").innerHTML =
-"⚠ Delivery: Negative<br>✅ Food: Positive<br><br>Overall Sentiment: Mixed";
-}
-else if(text.includes("good") || text.includes("love")) {
-document.getElementById("result").innerHTML =
-"✅ Overall Sentiment: Positive";
-}
-else {
-document.getElementById("result").innerHTML =
-"🙂 Overall Sentiment: Neutral";
+function wait(ms){
+return new Promise(r=>setTimeout(r,ms));
 }
 
+async function run(){
+
+let input=document.getElementById("text").value.toLowerCase();
+let log=document.getElementById("log");
+log.innerHTML="";
+
+log.innerHTML+="🤖 I received your text.<br>";
+await wait(600);
+
+let words=input.split(" ");
+log.innerHTML+="📦 I split it into words:<br>"+words.join(" , ")+"<br>";
+await wait(600);
+
+let pos=["love","good","great","nice","happy","excellent","awesome","amazing"];
+let neg=["hate","bad","late","worst","angry","poor","sad","terrible"];
+
+let score=0;
+let hits=[];
+
+words.forEach(w=>{
+if(pos.includes(w)){score++;hits.push(w);}
+if(neg.includes(w)){score--;hits.push(w);}
+});
+
+log.innerHTML+="🧠 I compared words with what I learned earlier.<br>";
+await wait(600);
+
+let highlighted=words.map(w=>{
+return hits.includes(w)?`<span class='highlight'>${w}</span>`:w;
+}).join(" ");
+
+log.innerHTML+="🔍 Important words:<br>"+highlighted+"<br>";
+await wait(600);
+
+let percent=Math.min(100,Math.abs(score)*25+40);
+document.getElementById("conf").style.width=percent+"%";
+
+let result=
+score>=3?"Very Positive 😄":
+score>=1?"Positive 🙂":
+score==0?"Neutral 😐":
+score<=-3?"Very Negative 😡":
+"Negative 😟";
+
+log.innerHTML+="📊 Confidence: "+percent+"%<br>";
+await wait(400);
+
+log.innerHTML+="✅ FINAL RESULT: <b>"+result+"</b>";
+
 }
+
 </script>
 
 </body>
 </html>
-<!-- rebuild trigger -->
+
