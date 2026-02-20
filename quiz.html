@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>ML Quiz – Created by Jeshurun</title>
+<title>ML + NLP Quiz</title>
 
 <style>
 body{
@@ -13,15 +12,31 @@ color:white;
 overflow:hidden;
 }
 
-h1{text-align:center;}
+.center{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+height:100vh;
+text-align:center;
+}
+
+button{
+padding:15px 40px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:cyan;
+cursor:pointer;
+margin-top:20px;
+}
 
 .card{
-max-width:700px;
-margin:60px auto;
 background:#111;
 padding:30px;
 border-radius:15px;
-box-shadow:0 0 30px cyan;
+box-shadow:0 0 25px cyan;
+max-width:700px;
 animation:float 3s infinite alternate;
 }
 
@@ -30,50 +45,65 @@ from{transform:translateY(0)}
 to{transform:translateY(-15px)}
 }
 
-button{
+.option{
 width:100%;
 margin-top:10px;
 padding:12px;
-background:#0ff;
-border:none;
-border-radius:8px;
+background:#222;
+border:2px solid transparent;
+color:white;
+border-radius:10px;
 font-size:16px;
-cursor:pointer;
 }
 
-button:hover{background:#0cc}
-
-#creator{
-position:fixed;
-bottom:10px;
-right:10px;
-opacity:.7;
-}
+.correct{border-color:lime}
+.wrong{border-color:red}
 
 .bubble{
 position:absolute;
-width:20px;
-height:20px;
+width:15px;
+height:15px;
 background:cyan;
 border-radius:50%;
-animation:bubble 10s infinite linear;
-opacity:.4;
+opacity:.3;
+animation:bubble 12s infinite linear;
 }
 
 @keyframes bubble{
 from{bottom:-20px;}
 to{bottom:110%;}
 }
+
+#creator{
+position:fixed;
+bottom:10px;
+right:10px;
+opacity:.6;
+}
 </style>
 </head>
 
 <body>
 
-<h1>🤖 Machine Learning Quiz</h1>
+<audio id="win" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="lose" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+<div id="splash" class="center">
+<h1>🤖 ML + NLP Quiz</h1>
+<h3>Learn Machine Learning</h3>
+<button onclick="start()">Start Quiz</button>
+</div>
+
+<div id="quiz" class="center" style="display:none">
 <div class="card">
 <h2 id="q"></h2>
 <div id="opts"></div>
+</div>
+</div>
+
+<div id="result" class="center" style="display:none">
+<h1 id="score"></h1>
+<button onclick="location.reload()">Restart</button>
 </div>
 
 <div id="creator">App created by Jeshurun</div>
@@ -87,54 +117,66 @@ b.style.animationDuration=5+Math.random()*10+"s";
 document.body.appendChild(b);
 }
 
-const pool=[
-["What is ML?","Teaching computers","Cooking","Drawing","Sleeping",0],
-["NLP means?","Robot talk","Language processing","Gaming","Music",1],
-["Data used to train?","Pizza","Numbers","Dataset","Shoes",2],
-["AI brain?","CPU","Neural Network","RAM","Fan",1],
-["Positive sentiment?","I love it","I hate it","Ok","None",0],
-["Negative example?","Great","Bad","Nice","Wow",1],
-["Tokenization means?","Breaking words","Eating","Drawing","Jumping",0],
-["Model learns from?","Experience","Battery","Screen","Mouse",0],
-["Deployment means?","Launch","Delete","Sleep","Ignore",0],
-["Confidence score is?","Accuracy","Guess","Luck","Battery",0]
+let pool=[
+["What is ML?","Teaching computers","Sleeping","Cooking","Drawing",0],
+["NLP means?","Robot","Language processing","Gaming","Music",1],
+["Positive example?","I love this","Bad","Angry","None",0],
+["Negative word?","Great","Nice","Bad","Wow",2],
+["Dataset means?","Shoes","Data collection","Pizza","Laptop",1],
+["AI brain?","Battery","Neural Network","Mouse","Cable",1],
+["Tokenization?","Split words","Jump","Sleep","Paint",0],
+["Model learns from?","Experience","Screen","Keyboard","Fan",0],
+["Deploy means?","Launch","Delete","Sleep","Ignore",0],
+["Confidence score?","Accuracy","Luck","Noise","Battery",0]
 ];
 
-while(pool.length<100) pool.push(...pool);
-
-let used=[];
 let score=0;
+let asked=0;
+let current;
+
+function start(){
+document.getElementById("splash").style.display="none";
+document.getElementById("quiz").style.display="flex";
+next();
+}
 
 function next(){
-if(used.length==20){
-alert("Quiz finished!");
-location.reload();
+if(asked==10){
+document.getElementById("quiz").style.display="none";
+document.getElementById("result").style.display="flex";
+document.getElementById("score").innerText="Final Score: "+score+"/10";
+return;
 }
 
-let i;
-do{i=Math.floor(Math.random()*pool.length);}while(used.includes(i));
-used.push(i);
+let i=Math.floor(Math.random()*pool.length);
+current=pool.splice(i,1)[0];
 
-let q=pool[i];
-document.getElementById("q").innerText=q[0];
+document.getElementById("q").innerText=current[0];
 
-let html="";
-for(let j=1;j<=4;j++){
-html+=`<button onclick="pick(${j-1},${q[5]})">${q[j]}</button>`;
+let h="";
+for(let i=1;i<=4;i++){
+h+=`<button class="option" onclick="pick(this,${i-1},${current[5]})">${current[i]}</button>`;
 }
-document.getElementById("opts").innerHTML=html;
+document.getElementById("opts").innerHTML=h;
 }
 
-function pick(a,b){
-if(a!=b){
-alert("Wrong! Question removed.");
-}else{
+function pick(btn,a,b){
+let buttons=document.querySelectorAll(".option");
+
+buttons.forEach(x=>x.disabled=true);
+
+if(a==b){
+btn.classList.add("correct");
+document.getElementById("win").play();
 score++;
-}
-next();
+}else{
+btn.classList.add("wrong");
+document.getElementById("lose").play();
 }
 
-next();
+asked++;
+setTimeout(next,800);
+}
 </script>
 
 </body>
